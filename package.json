@@ -1,0 +1,28 @@
+{
+  "name": "findeas-server",
+  "version": "1.0.0",
+  "description": "clone, install, run.",
+  "keywords": [
+    "ideas",
+    "finance"
+  ],
+  "homepage": "https://github.com/nulljosh/findeas-server#readme",
+  "bugs": {
+    "url": "https://github.com/nulljosh/findeas-server/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nulljosh/findeas-server.git"
+  },
+  "license": "MPL-2.0",
+  "author": "Joshua Trommel",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "npm run"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2"
+  }
+}
