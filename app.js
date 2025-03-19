@@ -22,6 +22,18 @@ app.get('/', (req, res) => {
     res.sendStatus(200);
 });
 
+app.get('/users.json', (req, res) => {
+    User.find()
+        .then((users) => {res.send(users)})
+        .catch((err) => {throw err});
+});
+
+app.delete('/delete/users.json', (req, res) => {
+    User.deleteMany()
+        .then((response) => res.send(response))
+        .catch((err) => {throw err});
+});
+
 app.post('/user', (req, res) => {
     if (!req.body.username) return res.send('no username supplied');
     if (!req.body.password) return res.send('no password supplied');
