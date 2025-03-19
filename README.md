@@ -1,5 +1,11 @@
 # findeas-web
 
+install mongodb
+
+```bash
+brew install mongodb
+```
+
 clone, install, `npm run start`.
 
 

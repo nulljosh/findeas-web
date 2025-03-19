@@ -3,19 +3,28 @@ const express = require('express')
     , bodyParser = require('body-parser')
     , mongoose = require('mongoose');
 
-const PORT = process.env.PORT || 3030;
-app.use(express.static(__dirname + '/public'));
+const User = require('./model/User');
 
-const schema = new mongoose.Schema({ name: String, password: String});
+const PORT = process.env.PORT || 3030;
+const DATABASE = 'mongodb://127.0.0.1:27017/findeas';
+
+mongoose.connect(DATABASE).then((ans) => {
+    console.log("ConnectedSuccessful")
+}).catch((err) => {
+    console.log("Error in the Connection")
+});
+
+app.use(express.static(__dirname + '/public'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.get('/', (req, res) => {
-    res.send('💡');
+    res.sendStatus(200);
 });
 
 app.post('/user', (req, res) => {
-    // new user
-    const User = mongoose.model('User', schema);
-
+    if (!req.body.username) return res.send('no username supplied');
+    res.send(req.body);
 });
 
 app.listen(PORT, () => {
