@@ -24,7 +24,16 @@ app.get('/', (req, res) => {
 
 app.post('/user', (req, res) => {
     if (!req.body.username) return res.send('no username supplied');
-    res.send(req.body);
+    if (!req.body.password) return res.send('no password supplied');
+
+    const user = User.create({
+        username: req.body.username,
+        password: req.body.password
+    }).then(result => {
+        res.send(result);
+    }).catch(err => {
+        res.send(err);
+    });
 });
 
 app.listen(PORT, () => {
