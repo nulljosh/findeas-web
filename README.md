@@ -1,6 +1,6 @@
-# findeas-server
+# findeas-web
 
-clone, install, `run start`.
+clone, install, `npm run start`.
 
 
 ```bash
@@ -9,4 +9,4 @@ cd findeas-server
 npm install && npm run start
 ```
 
-LICENSE
+[LICENSE](LICENSE)
