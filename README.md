@@ -1,12 +1,12 @@
 # findeas-server
 
-clone, install, run.
+clone, install, `run start`.
 
 
 ```bash
 git clone https://github.com/nulljosh/findeas-server
 cd findeas-server
-yarn install && yarn run
+npm install && npm run start
 ```
 
 LICENSE

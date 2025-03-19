@@ -8,6 +8,14 @@ app.get('/', (req, res) => {
     res.send('/');
 });
 
+app.get('/login', (req, res) => {
+    res.send('login');
+});
+
+app.get('/register', (req, res) => {
+    res.send('register');
+});
+
 app.listen(PORT, () => {
     console.log(`watching http://localhost:${PORT}`);
 });
