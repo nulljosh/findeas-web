@@ -22,6 +22,11 @@ app.get('/', (req, res) => {
     res.sendStatus(200);
 });
 
+app.post('/post', (req, res) => {
+    if (!req.body.idea) return res.send('no idea supplied');
+    if (!)
+})
+
 app.get('/users.json', (req, res) => {
     User.find()
         .then((users) => {res.send(users)})
