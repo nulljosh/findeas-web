@@ -3,7 +3,8 @@ const express = require('express')
     , bodyParser = require('body-parser')
     , mongoose = require('mongoose');
 
-const User = require('./model/User');
+const User = require('./model/User')
+    , Post = require('./model/Post');
 
 const PORT = process.env.PORT || 3030;
 const DATABASE = 'mongodb://127.0.0.1:27017/findeas';
@@ -23,8 +24,21 @@ app.get('/', (req, res) => {
 });
 
 app.post('/post', (req, res) => {
-    if (!req.body.idea) return res.send('no idea supplied');
-    if (!)
+    if (!req.body.content) return res.send('no content provided');
+    if (!req.body.author) return res.send('no author');
+
+    const post = Post.create({
+        content: req.body.content,
+        author: req.body.author
+    })
+        .then((createdPost) => res.send(createdPost))
+        .catch((err) => {throw err});
+});
+
+app.get('/posts', (req, res) => {
+    Post.find()
+        .then((posts) => {res.send(posts)})
+        .catch((err) => {throw err});
 })
 
 app.get('/users.json', (req, res) => {
@@ -47,10 +61,18 @@ app.post('/user', (req, res) => {
         username: req.body.username,
         password: req.body.password
     }).then(result => {
+        console.log(`created new user ${req.body.username}`);
         res.send(result);
     }).catch(err => {
         res.send(err);
     });
+});
+
+app.get('/:username', (req, res) => {
+    if (!req.params['username']) return res.send('no username provided');
+    User.find({username: req.params['username']})
+        .then((user) => {res.send(user[0])})
+        .catch((err) => {throw err});
 });
 
 app.listen(PORT, () => {

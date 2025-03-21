@@ -4,7 +4,7 @@ const mongoose = require('mongoose')
 const SALT = 10;
 
 const postSchema = mongoose.Schema({
-    idea: {type: String},
+    content: {type: String},
     author: {type: String}
 });
 
