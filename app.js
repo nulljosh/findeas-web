@@ -71,7 +71,10 @@ app.post('/user', (req, res) => {
 app.get('/:username', (req, res) => {
     if (!req.params['username']) return res.send('no username provided');
     User.find({username: req.params['username']})
-        .then((user) => {res.send(user[0])})
+        .then((user) => {
+            user = user[0];
+            res.send({username:user.username, _id: user._id})
+        })
         .catch((err) => {throw err});
 });
 
