@@ -3,8 +3,8 @@ const express = require('express')
     , bodyParser = require('body-parser')
     , mongoose = require('mongoose');
 
-const User = require('./model/User')
-    , Post = require('./model/Post');
+const User = require('./app/models/User')
+    , Post = require('./app/models/Post');
 
 const PORT = process.env.PORT || 3030;
 const DATABASE = 'mongodb://127.0.0.1:27017/findeas';
