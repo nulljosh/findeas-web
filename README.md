@@ -4,8 +4,8 @@ mongodb
 
 ```bash
 brew tap mongodb/brew
-brew install mongodb-community
-brew services start mongodb-community
+brew install mongodb-community@6.0
+brew services start mongodb-community@6.0
 ```
 
 clone, install, `npm run start`.
