@@ -5,7 +5,8 @@ const SALT = 10;
 
 const userSchema = mongoose.Schema({
     username: {type: String, required: true},
-    password: {type: String, required: true}
+    password: {type: String, required: true},
+    posts: {type: Array}
 });
 
 userSchema.pre('save', function(next) {

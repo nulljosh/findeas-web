@@ -55,14 +55,13 @@ app.delete('/delete/users.json', (req, res) => {
 });
 
 app.post('/user', (req, res) => {
-    if (!req.body.username) return res.send('no username supplied');
-    if (!req.body.password) return res.send('no password supplied');
+    if (!req.body.username || req.body.password) return res.send('no credentials supplied');
 
     const user = User.create({
         username: req.body.username,
         password: req.body.password
     }).then(result => {
-        console.log(`created new user ${req.body.username}`);
+        console.log(`new user ${req.body.username}`);
         res.send(result);
     }).catch(err => {
         res.send(err);
@@ -72,7 +71,10 @@ app.post('/user', (req, res) => {
 app.get('/:username', (req, res) => {
     if (!req.params['username']) return res.send('no username provided');
     User.find({username: req.params['username']})
-        .then((user) => {res.send(user[0])})
+        .then((user) => {
+            user = user[0];
+            res.send({username:user.username, _id: user._id})
+        })
         .catch((err) => {throw err});
 });
 
