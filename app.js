@@ -55,7 +55,7 @@ app.delete('/delete/users.json', (req, res) => {
 });
 
 app.post('/user', (req, res) => {
-    if (!req.body.username || req.body.password) return res.send('no credentials supplied');
+    if (!req.body.username || !req.body.password) return res.send('no credentials supplied');
 
     const user = User.create({
         username: req.body.username,
