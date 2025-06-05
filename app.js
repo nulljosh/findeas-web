@@ -1,83 +1,133 @@
-const express = require('express')
-    , app = express()
-    , bodyParser = require('body-parser')
-    , mongoose = require('mongoose');
+const express = require('express');
+const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+const User = require('./app/models/User');
+const Post = require('./app/models/Post');
 
-const User = require('./app/models/User')
-    , Post = require('./app/models/Post');
+const app = express();
 
+// Constants
 const PORT = process.env.PORT || 3030;
 const DATABASE = process.env.DATABASE || 'mongodb://127.0.0.1:27017/findeas';
 
-mongoose.connect(DATABASE).then((ans) => {
-    console.log(`conneting: ${DATABASE}`);
-    console.log("ConnectedSuccessful")
-}).catch((err) => {
-    console.log("Error in the Connection")
-});
+// Database Connection
+mongoose.connect(DATABASE)
+    .then(() => console.log(`Connected to database: ${DATABASE}`))
+    .catch((err) => console.error('Error connecting to database:', err));
 
-app.use(express.static(__dirname + '/public'));
+// Middleware
+app.use(express.static(`${__dirname}/public`));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
-app.get('/', (req, res) => {
-    res.sendStatus(200);
+// Routes
+// Health check
+app.get('/', (req, res) => res.sendStatus(200));
+
+// Create a new post
+app.post('/post', async (req, res) => {
+    const { content, author } = req.body;
+
+    if (!content) return res.status(400).send({ error: 'No content provided' });
+    if (!author) return res.status(400).send({ error: 'No author provided' });
+
+    try {
+        const createdPost = await Post.create({ content, author });
+        res.status(201).send(createdPost);
+    } catch (err) {
+        console.error('Error creating post:', err);
+        res.status(500).send({ error: 'Failed to create post' });
+    }
 });
 
-app.post('/post', (req, res) => {
-    if (!req.body.content) return res.send('no content provided');
-    if (!req.body.author) return res.send('no author');
-
-    const post = Post.create({
-        content: req.body.content,
-        author: req.body.author
-    })
-        .then((createdPost) => res.send(createdPost))
-        .catch((err) => {throw err});
+// Get all posts
+app.get('/posts', async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.status(200).send(posts);
+    } catch (err) {
+        console.error('Error fetching posts:', err);
+        res.status(500).send({ error: 'Failed to fetch posts' });
+    }
 });
 
-app.get('/posts', (req, res) => {
-    Post.find()
-        .then((posts) => {res.send(posts)})
-        .catch((err) => {throw err});
-})
-
-app.get('/users.json', (req, res) => {
-    User.find()
-        .then((users) => {res.send(users)})
-        .catch((err) => {throw err});
+// Get all users
+app.get('/users.json', async (req, res) => {
+    try {
+        const users = await User.find();
+        res.status(200).send(users);
+    } catch (err) {
+        console.error('Error fetching users:', err);
+        res.status(500).send({ error: 'Failed to fetch users' });
+    }
 });
 
-app.delete('/delete/users.json', (req, res) => {
-    User.deleteMany()
-        .then((response) => res.send(response))
-        .catch((err) => {throw err});
+// Delete all users
+app.delete('/delete/users.json', async (req, res) => {
+    try {
+        const response = await User.deleteMany();
+        res.status(200).send(response);
+    } catch (err) {
+        console.error('Error deleting users:', err);
+        res.status(500).send({ error: 'Failed to delete users' });
+    }
 });
 
-app.post('/user', (req, res) => {
-    if (!req.body.username || !req.body.password) return res.send('no credentials supplied');
+// Delete user by username
+app.delete('/delete/:username', async (req, res) => {
+    const { username } = req.params;
 
-    const user = User.create({
-        username: req.body.username,
-        password: req.body.password
-    }).then(result => {
-        console.log(`new user ${req.body.username}`);
-        res.send(result);
-    }).catch(err => {
-        res.send(err);
-    });
+    try {
+        const result = await User.deleteOne({ username });
+        if (result.deletedCount > 0) {
+            res.status(200).send({ message: `User ${username} deleted successfully` });
+        } else {
+            res.status(404).send({ error: `User ${username} not found` });
+        }
+    } catch (err) {
+        console.error('Error deleting user:', err);
+        res.status(500).send({ error: 'Failed to delete user' });
+    }
 });
 
-app.get('/:username', (req, res) => {
-    if (!req.params['username']) return res.send('no username provided');
-    User.find({username: req.params['username']})
-        .then((user) => {
-            user = user[0];
-            res.send({username:user.username, _id: user._id})
-        })
-        .catch((err) => {throw err});
+// Create a new user
+app.post('/user', async (req, res) => {
+    const { username, password } = req.body;
+
+    if (!username || !password) {
+        return res.status(400).send({ error: 'No credentials supplied' });
+    }
+
+    try {
+        const newUser = await User.create({ username, password });
+        console.log(`New user created: ${username}`);
+        res.status(201).send(newUser);
+    } catch (err) {
+        console.error('Error creating user:', err);
+        res.status(500).send({ error: 'Failed to create user' });
+    }
 });
 
+// Get user by username
+app.get('/:username', async (req, res) => {
+    const { username } = req.params;
+
+    if (!username) return res.status(400).send({ error: 'No username provided' });
+
+    try {
+        const user = await User.findOne({ username });
+        if (user) {
+            res.status(200).send({ username: user.username, _id: user._id });
+        } else {
+            res.status(404).send({ error: 'User not found' });
+        }
+    } catch (err) {
+        console.error('Error fetching user:', err);
+        res.status(500).send({ error: 'Failed to fetch user' });
+    }
+});
+
+// Start Server
 app.listen(PORT, () => {
-    console.log(`watching http://localhost:${PORT}`);
+    console.log(`Server running at http://localhost:${PORT}`);
 });
