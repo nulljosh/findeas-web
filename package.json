@@ -1,18 +1,18 @@
 {
-  "name": "findeas-server",
+  "name": "findeas-web",
   "version": "1.0.0",
   "description": "idea marketplace",
   "keywords": [
     "ideas",
     "finance"
   ],
-  "homepage": "https://github.com/nulljosh/findeas-server#readme",
+  "homepage": "https://github.com/nulljosh/findeas-web#readme",
   "bugs": {
-    "url": "https://github.com/nulljosh/findeas-server/issues"
+    "url": "https://github.com/nulljosh/findeas-web/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/nulljosh/findeas-server.git"
+    "url": "git+https://github.com/nulljosh/findeas-web.git"
   },
   "license": "MPL-2.0",
   "author": "Joshua Trommel",

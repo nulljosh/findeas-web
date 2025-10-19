@@ -55,8 +55,8 @@ brew services start mongodb-community@6.0
 
 ### Installation
 ```bash
-git clone https://github.com/nulljosh/findeas-server
-cd findeas-server
+git clone https://github.com/nulljosh/findeas-web
+cd findeas-web
 npm install
 ```
 
@@ -107,8 +107,8 @@ The server runs on `http://localhost:3030` by default.
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/nulljosh/findeas-server
-cd findeas-server
+git clone https://github.com/nulljosh/findeas-web
+cd findeas-web
 ```
 
 2. **Install MongoDB**
