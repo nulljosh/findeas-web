@@ -1,7 +1,5 @@
 # Findeas
 
-A community-driven platform where ideas are voted on and automatically get business incorporation help when they reach milestone thresholds (10, 100, 1000+ upvotes).
-
 ## Features
 
 ### Core Functionality
