@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Findeas - Reddit for Ideas</title>
+    <style>
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --accent-color: #007bff;
+            --card-bg: #f8f9fa;
+            --border-color: #e9ecef;
+            --shadow: 0 2px 10px rgba(0,0,0,0.1);
+            --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a2e;
+            --text-color: #eee;
+            --accent-color: #4f98cd;
+            --card-bg: #16213e;
+            --border-color: #2d3748;
+            --shadow: 0 2px 10px rgba(0,0,0,0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-family);
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: all 0.3s ease;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            padding: 2rem 0;
+            border-bottom: 1px solid var(--border-color);
+            position: relative;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+        }
+
+        .theme-toggle {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.8;
+        }
+
+        .milestone-badges {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+        }
+
+        .feature-card h3 {
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+
+        .api-section {
+            background: var(--card-bg);
+            border-radius: 10px;
+            padding: 2rem;
+            margin: 3rem 0;
+            border: 1px solid var(--border-color);
+        }
+
+        .api-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .endpoint {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .endpoint:last-child {
+            border-bottom: none;
+        }
+
+        .method {
+            background: var(--accent-color);
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: center;
+        }
+
+        .method.post {
+            background: #28a745;
+        }
+
+        .method.delete {
+            background: #dc3545;
+        }
+
+        .endpoint-path {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+        }
+
+        .setup-section {
+            margin: 3rem 0;
+        }
+
+        .setup-section h2 {
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .code-block {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+        }
+
+        .milestones-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .milestone-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .milestone-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 4rem;
+            opacity: 0.7;
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .milestone-badges {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+
+            .container {
+                padding: 0 15px;
+            }
+        }
+
+        /* Floating animation background */
+        .floating-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .floating-line {
+            position: absolute;
+            background: var(--accent-color);
+            border-radius: 2px;
+            animation: float 8s infinite linear;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-bg" id="floatingBg"></div>
+    
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">Findeas</div>
+                <button class="theme-toggle" onclick="toggleTheme()">🌙</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <section class="hero">
+                <h1>Reddit for Ideas</h1>
+                <p>Community-driven platform where great ideas get automatic business help</p>
+                <div class="milestone-badges">
+                    <span class="badge">10 upvotes → Business consultation</span>
+                    <span class="badge">100 upvotes → Legal incorporation</span>
+                    <span class="badge">1000 upvotes → Full business setup</span>
+                </div>
+            </section>
+
+            <section class="features">
+                <div class="feature-card">
+                    <h3>🔐 Secure Authentication</h3>
+                    <p>JWT-based auth system with bcrypt password hashing, rate limiting, and comprehensive input validation.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📊 Smart Voting System</h3>
+                    <p>Reddit-style upvote/downvote with automatic milestone tracking and business assistance triggers.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>🏢 Business Integration</h3>
+                    <p>Automatic legal help when ideas reach popularity thresholds - from consultation to incorporation.</p>
+                </div>
+                <div class="feature-card">
+                    <h3>📱 Modern API</h3>
+                    <p>RESTful API with pagination, sorting, categories, and comprehensive error handling.</p>
+                </div>
+            </section>
+
+            <section class="api-section">
+                <h2>API Endpoints</h2>
+                
+                <h3 style="margin: 1.5rem 0 1rem; color: var(--text-color);">Authentication</h3>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/auth/register</span>
+                    <span>Create new user account</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/auth/login</span>
+                    <span>Login with username/password</span>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem; color: var(--text-color);">Posts</h3>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/posts</span>
+                    <span>Get all posts (paginated, sortable)</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/posts</span>
+                    <span>Create new post (auth required)</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/posts/:id</span>
+                    <span>Get single post with details</span>
+                </div>
+                <div class="endpoint">
+                    <span class="method post">POST</span>
+                    <span class="endpoint-path">/posts/:id/vote</span>
+                    <span>Vote on post (auth required)</span>
+                </div>
+
+                <h3 style="margin: 1.5rem 0 1rem; color: var(--text-color);">Milestones</h3>
+                <div class="endpoint">
+                    <span class="method">GET</span>
+                    <span class="endpoint-path">/milestones</span>
+                    <span>View reached milestones</span>
+                </div>
+            </section>
+
+            <section class="setup-section">
+                <h2>Quick Setup</h2>
+                <div class="code-block">
+# Install MongoDB<br>
+brew tap mongodb/brew<br>
+brew install mongodb-community@6.0<br>
+brew services start mongodb-community@6.0<br>
+<br>
+# Clone and setup<br>
+git clone https://github.com/nulljosh/findeas-server<br>
+cd findeas-server<br>
+npm install<br>
+cp .env.example .env<br>
+npm start
+                </div>
+                <p>Server runs on <strong>http://localhost:3030</strong></p>
+            </section>
+
+            <section class="milestones-grid">
+                <div class="milestone-card">
+                    <div class="milestone-number">10</div>
+                    <h4>Business Consultation</h4>
+                    <p>Professional business advice and strategy session</p>
+                </div>
+                <div class="milestone-card">
+                    <div class="milestone-number">100</div>
+                    <h4>Legal Incorporation</h4>
+                    <p>Official business registration and legal paperwork</p>
+                </div>
+                <div class="milestone-card">
+                    <div class="milestone-number">1000</div>
+                    <h4>Full Business Setup</h4>
+                    <p>Trademark registration and complete business formation</p>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Findeas. Turning community validation into business reality.</p>
+        </div>
+    </footer>
+
+    <script>
+        function toggleTheme() {
+            const body = document.body;
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            
+            const toggle = document.querySelector('.theme-toggle');
+            toggle.textContent = newTheme === 'dark' ? '☀️' : '🌙';
+        }
+
+        // Load saved theme
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.body.setAttribute('data-theme', savedTheme);
+        document.querySelector('.theme-toggle').textContent = savedTheme === 'dark' ? '☀️' : '🌙';
+
+        // Create floating background elements
+        function createFloatingElements() {
+            const bg = document.getElementById('floatingBg');
+            const colors = ['var(--accent-color)', 'var(--border-color)'];
+            
+            for (let i = 0; i < 5; i++) {
+                const line = document.createElement('div');
+                line.className = 'floating-line';
+                line.style.left = Math.random() * 100 + '%';
+                line.style.width = '2px';
+                line.style.height = Math.random() * 100 + 50 + 'px';
+                line.style.background = colors[Math.floor(Math.random() * colors.length)];
+                line.style.animationDelay = Math.random() * 8 + 's';
+                line.style.animationDuration = (8 + Math.random() * 4) + 's';
+                bg.appendChild(line);
+            }
+        }
+
+        createFloatingElements();
+    </script>
+</body>
+</html>
