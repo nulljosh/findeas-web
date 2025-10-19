@@ -1,5 +1,3 @@
-# [Findeas](https://heyitsmejosh.com/findeas-web/)
-
 ## Features
 
 ### Core Functionality
