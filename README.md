@@ -1,4 +1,4 @@
-# Findeas - Reddit for Ideas
+# Findeas
 
 A community-driven platform where ideas are voted on and automatically get business incorporation help when they reach milestone thresholds (10, 100, 1000+ upvotes).
 
@@ -104,6 +104,41 @@ The server runs on `http://localhost:3030` by default.
 - Timestamps
 
 ## Development
+
+### Getting Started
+
+1. **Clone the repository**
+```bash
+git clone https://github.com/nulljosh/findeas-server
+cd findeas-server
+```
+
+2. **Install MongoDB**
+```bash
+brew tap mongodb/brew
+brew install mongodb-community@6.0
+brew services start mongodb-community@6.0
+```
+
+3. **Install dependencies**
+```bash
+npm install
+```
+
+4. **Configure environment**
+```bash
+cp .env.example .env
+# Edit .env with your settings (JWT_SECRET, DATABASE, FRONTEND_URL)
+```
+
+5. **Start the server**
+```bash
+npm start  # Development mode with nodemon
+# or
+node app.js  # Production mode
+```
+
+Server runs on `http://localhost:3030` by default.
 
 ### Database Indexes
 - User: username, email
